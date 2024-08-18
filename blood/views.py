@@ -27,19 +27,23 @@ def SignUpView(request):
     return render(request, 'blood/signup.html', context)
     
 def SignInView(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return redirect('home')
-    else:
-        messages.error(request, 'Invalid email or password.')
-    
-    return render(request, 'blood/signin.html')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-def Home(request):
-    return render(request, 'blood/home.html')
+        if username and password:
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')  # Redirect to your desired page after successful login
+            else:
+                # Handle the case where authentication fails
+                return render(request, 'blood/signin.html', {'error': 'Invalid username or password'})
+        else:
+            # Handle the case where username or password is missing
+            return render(request, 'blood/signin.html', {'error': 'Please enter both username and password'})
+
+    return render(request, 'blood/signin.html')
 
 @login_required
 def Create_emergency_request(request):

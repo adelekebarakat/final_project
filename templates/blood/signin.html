@@ -4,9 +4,10 @@
 {% block content%}
     <h1>Blood Donation</h1>
     <h2>login</h2>
-    <form method="post">
+    <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>
     
