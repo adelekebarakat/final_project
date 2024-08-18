@@ -1,0 +1,18 @@
+{% extends './base.html' %}
+
+{% block content %}
+  <h2>Emergency Requests</h2>
+  <ul>
+    {% for emergency in emergencies %}
+      <li>
+        <a href="{% url 'emergency_detail' emergency.id %}">
+          <strong>{{ emergency.user.username }}</strong> requires 
+          <strong>{{ emergency.blood_type }}</strong> blood 
+          (Urgency: {{ emergency.urgency_level }}) at 
+          {{ emergency.location }}.
+        </a>
+        Contact: {{ emergency.contact_number }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

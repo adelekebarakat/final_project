@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Location</title>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsD8JlHo5ohM5J9ARhoQEMCseXG4UYySw&callback=initMap"></script>
+    <script>
+        function initMap() {
+            var emergencyLocation = {lat: {{ emergency.latitude }}, lng: {{ emergency.longitude }}};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: emergencyLocation
+            });
+            var marker = new google.maps.Marker({
+                position: emergencyLocation,
+                map: map
+            });
+        }
+    </script>
+</head>
+<body onload="initMap()">
+    <h1>Emergency Details</h1>
+    <p>Requested by: {{ emergency.user.username }}</p>
+    <p>Blood Type Required: {{ emergency.blood_type }}</p>
+    <p>Location: {{ emergency.location }}</p>
+    <div id="map" style="height: 400px; width: 100%;"></div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends './base.html' %}
+
+{% block content %}
+  <h2>Users with Compatible Blood Types</h2>
+  <p>Required Blood Type: {{ required_blood_type }}</p>
+  <ul>
+    {% for user in compatible_users %}
+      <li>
+        <strong>{{ user.username }}</strong> ({{ user.blood_type }})
+        - Contact: {{ user.Phone_number }}
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'emergency_request' %}">Back to Request Form</a>
+{% endblock %}
