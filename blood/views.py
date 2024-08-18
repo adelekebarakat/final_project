@@ -2,13 +2,14 @@ from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.db.models import Q
 from .forms import CustomUserCreationForm, EmergencyForm, sanitize_phone_number
 from .models import Emergency, CanDonateTo, CanReceiveFrom, User, BloodType
 from .sms import send_sms
 from .geolocation import get_coordinates
 from .utils import reverse_geocode
+from django.contrib import messages
 # Create your views here.
 
 def SignUpView(request):
@@ -26,6 +27,15 @@ def SignUpView(request):
     return render(request, 'blood/signup.html', context)
     
 def SignInView(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('home')
+    else:
+        messages.error(request, 'Invalid email or password.')
+    
     return render(request, 'blood/signin.html')
 
 def Home(request):
