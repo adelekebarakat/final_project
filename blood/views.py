@@ -9,7 +9,7 @@ from .models import Emergency, CanDonateTo, CanReceiveFrom, User, BloodType
 from .sms import send_sms
 from .geolocation import get_coordinates
 from .utils import reverse_geocode
-from django.contrib import messages
+
 # Create your views here.
 
 def SignUpView(request):
@@ -26,6 +26,7 @@ def SignUpView(request):
     context = {'form': form}
     return render(request, 'blood/signup.html', context)
     
+
 def SignInView(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -44,6 +45,9 @@ def SignInView(request):
             return render(request, 'blood/signin.html', {'error': 'Please enter both username and password'})
 
     return render(request, 'blood/signin.html')
+
+def Home(request):
+    return render(request, 'blood/home.html')
 
 @login_required
 def Create_emergency_request(request):
