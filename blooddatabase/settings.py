@@ -131,5 +131,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GOOGLE_MAPS_API_KEY= config('GOOGLE_MAPS_API_KEY')
 
-TERMII_API_KEY = 'TLvoMKVDihCBYffrFQNsvUjsWgZWPSjshRFwhBWPvxpkBunYcuUaaUXQuuAUye'
-TERMII_BASE_URL = 'https://v3.api.termii.com'
+TERMII_API_KEY = config('TERMII_API_KEY')
+TERMII_BASE_URL = config('TERMII_BASE_URL')
