@@ -1,0 +1,10 @@
+@font-face{
+    font-family: "Poppins";
+    src: url('./Poppins/Poppins-Bold.ttf');
+}
+
+@font-face{
+    font-family: "Nunito";
+    src: url('./Nunito/Nunito-VariableFont_wght.ttf');
+    
+}

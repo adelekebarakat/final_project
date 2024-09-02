@@ -46,6 +46,7 @@ def SignInView(request):
 
     return render(request, 'blood/signin.html')
 
+
 def Home(request):
     return render(request, 'blood/home.html')
 
@@ -60,25 +61,13 @@ def Create_emergency_request(request):
             emergency_request.contact_number = sanitize_phone_number(emergency_request.contact_number, 'NG')
 
             # Get coordinates from location using the separated function
-            # latitude, longitude = get_coordinates(emergency_request.location)
-            # emergency_request.latitude = latitude
-            # emergency_request.longitude = longitude
-            
-            # Get latitude and longitude from the form data
-            # latitude = request.POST.get('latitude')
-            # longitude = request.POST.get('longitude') # Get latitude, longitude, and filled location from the form data
+           
             latitude = request.POST.get('latitude')
             longitude = request.POST.get('longitude')
             filled_location = emergency_request.location  # This is the location filled in the form
 
 
-            # If latitude and longitude are provided, save them
-            # if latitude and longitude:
-            #     emergency_request.latitude = latitude
-            #     emergency_request.longitude = longitude
-
-            # emergency_request.save()
-            # Reverse geocode to get place name or address
+        
             if latitude and longitude:
                 incident_location_name = reverse_geocode(latitude, longitude, settings.GOOGLE_MAPS_API_KEY)
             else:
@@ -93,12 +82,7 @@ def Create_emergency_request(request):
             compatible_users = User.objects.filter(blood_type__in=compatible_blood_types)
             
             # Send SMS to compatible users
-            # for user in compatible_users:
-            #     formatted_phone_number = sanitize_phone_number(user.phone_number, 'NG')  # Adjust region code as needed
-            #     message = f"Emergency blood donation needed for {emergency_request.user}. Blood type required: {emergency_request.blood_type}. Location: {emergency_request.location}. Please respond if you can donate."
-            #     success, response_message = send_sms(formatted_phone_number, message)
-            #     if not success:
-            #         print(f"Failed to send SMS to {formatted_phone_number}: {response_message}")
+           
             for user in compatible_users:
                 formatted_phone_number = sanitize_phone_number(user.phone_number, 'NG')
                 message = (

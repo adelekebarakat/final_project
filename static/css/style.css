@@ -1,0 +1,178 @@
+*{
+    box-sizing: border-box;
+    line-height: normal;
+    font-family: inherit;
+    margin: unset;
+}
+
+a {
+    text-decoration: none;
+    color: var(--Secondary);
+    
+}
+.hero-section {
+    padding-bottom: 100px;
+}
+.right-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+.hero-section-text {
+    
+    justify-content: center;
+    align-items: center;
+    
+}
+h1 {
+    color: var(--accent) !important;
+    font-family: "Poppins";
+    font-size: 70px;
+    font-weight: 900;
+    line-height: 80px;
+}
+
+.hero-section-text p {
+    font-family: "Nunito";
+    font-size: 24px;
+    line-height: 40px;
+    font-weight: 800;
+    text-align: justify;
+}
+
+.logo img{
+    height: 75px;
+}
+.header {
+    background-color: var(--white_a700);
+    box-shadow: var(--shadow-sm);
+    justify-content: flex-end;
+    align-items: end;
+    padding: 0px 20px;
+}
+
+.hero-img img {
+    width: 100%;
+}
+
+
+.btn-primary{
+    background-color:   var(--primary);
+    --bs-btn-color: #fff;
+    --bs-btn-bg:  var(--primary);
+    --bs-btn-border-color:  var(--primary);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg:  var(--primary_500);
+    --bs-btn-hover-border-color:  var(--primary);
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg:  var(--primary);
+    --bs-btn-active-border-color:  var(--primary);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg:  var(--primary);
+    --bs-btn-disabled-border-color:  var(--primary);
+    justify-content: center;
+    height: 50px;
+    align-items: center;
+    width: 120px;
+    color: white;
+    border-radius: 30px;
+}
+.navbar-expand-lg .navbar-nav {
+    flex-direction: row;
+    gap: 10px;
+    margin-right: 10px;
+}
+.features {
+    margin-top: 70px;
+    padding-bottom: 100px;
+   
+}
+
+h2{
+    font-family: "Poppins";
+    font-size: 45px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 90px;
+
+}
+.card {
+    background-color: transparent;
+    
+    border: transparent;
+}
+.common-card{
+    background-color: var(--complimentary_color);
+    padding: 30px 20px;
+}
+
+.different-card {
+    background-color: var(--white_a700);
+    box-shadow: var(--shadow-sm);
+    padding: 30px 10px;
+}
+.card-body .text-body{
+    padding: 0px 10px;
+}
+.card-body .text-body p{
+   font-family: "Nunito";
+   font-weight: 600;
+   font-size: 20px;
+   line-height: 30px;
+   color: #424242;
+}
+.card .card-body .title h5 {
+    font-size: 24px;
+    color: var(--black_900);
+    line-height: 35px;
+    font-family: "Nunito";
+    font-weight: 800;
+
+}
+
+
+.donor-form {
+    margin-left: 8px;
+    margin-right: 8px;
+    gap: 22px;
+    display: flex;
+    background-color: var(--white_a700);
+    box-shadow: var(--shadow-xs);
+    align-self: stretch;
+    flex-direction: column;
+    align-items: start;
+    padding: 22px 42px;
+}
+.registration {
+    width: 600px;
+    height: auto;
+}
+:root {
+    --black_900: #000000;
+    --black_900_3f: #0000003f;
+    --accent: #424242;
+    --gray_800_1c: #4242421c;
+    --gray_800_89: #42424289;
+    --green_500: #4caf50;
+    --complimentary_color:#03A9F4;
+    --primary: #e53935;
+    --primary_500: #b72e2a;
+    --Secondary: #ffffff;
+    --shadow-xs: 10px 10px 10px 5px #42424289;
+    --shadow-sm: 0 4px 4px 0 #0000003f;
+    --radius-xs: 5px;
+    --radius-sm: 18px;
+    --radius-md: 34px;
+    --radius-lg: 36px;
+    --space-xs: 2px;
+    --space-sm: 4px;
+    --space-md: 10px;
+    --space-lg: 12px;
+    --space-xl: 18px;
+    --space-2xl: 24px;
+    --space-3xl: 30px;
+    --space-4xl: 130px;
+}

@@ -1,7 +1,149 @@
-{% extends './base.html'%}
-{% block title %} register {% endblock %}
 
-{% block content%}
-    <h1>Welcome</h1>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam praesentium, quo consequuntur possimus commodi nesciunt ratione at similique quod a.</p>
+
+{% extends './base.html'%}
+{% load static %}
+{% block title %} Blood App {% endblock %}
+
+
+{% block content%} 
+{% comment %} Hero section {% endcomment %}
+<div class="container hero-section">
+
+    <div class="row mt-5">
+        <div class="col-sm-12 col-md-6 col-lg-7 mt-3">
+            <div class="right-hero">
+                <div class="hero-section-text px-lg-5">
+                    <h1>Donate Blood Save Life</h1>
+                    <p class="mt-4">Join our community of heroes. Donate blood, respond to emergencies, and make a difference today.</p>
+                    <Button class="btn btn-primary mt-3">
+                        <a>Join Now</a>
+                    </Button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-5">
+            <div class="hero-img">
+               <img src="{% static 'image/hero-image.png' %}" alt="blood">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    {% comment %} Fetaure Section {% endcomment %}
+    <div class="features">
+        <div class="container">
+            <h2 class="text-center">Project Features</h2>
+            <div class="row mt-5">
+                {% comment %} Emergency request {% endcomment %}
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="card common-card mb-4">
+                        <div class="icon text-center">
+                            <img src="{% static "icons/emergency.svg" %}" alt="emergency">
+                        </div>
+                        <div class="card-body">
+                            <div class="title mb-3">
+                                <h5 class='text-center'>Emergency <br> Request</h5>
+    
+                            </div>
+                            <div class="text-body">
+                            <p clas>Send urgent blood requests instantly. Match with donors and notify them for fast, lifesaving help.</p>
+                        </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+    
+                {% comment %} Compatible feature {% endcomment %}
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="card different-card mb-4">
+                        <div class="icon text-center">
+                            <img src="{% static "icons/compatibility.svg" %}" alt="compatiblity">
+                        </div>
+                        <div class="card-body">
+                            <div class="title mb-3">
+                                <h5 class='text-center'> Blood Type <br> Compatibility Matching</h5>
+    
+                            </div>
+                            <div class="text-body">
+                            <p clas>Our system matches donors with recipients based on blood type compatibility, ensuring every donation counts.</p>
+                        </div>
+                        </div>
+                        
+                    </div>
+    
+                </div>
+    
+                {% comment %} Notification Feature {% endcomment %}
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class="card common-card mb-4">
+                        <div class="icon text-center">
+                            <img src="{% static "icons/alert.svg" %}" alt="notify">
+                        </div>
+                        <div class="card-body">
+                            <div class="title mb-3">
+                                <h5 class='text-center'>Real Time <br> Notification</h5>
+    
+                            </div>
+                            <div class="text-body">
+                            <p clas>Get instant notifications about urgent blood donation needs in your area. Respond quickly and help save lives.</p>
+                        </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% comment %} Registration {% endcomment %}
+
+    <div class="container">
+        <h2 class="text-center">Become a Donor today</h2>
+        <form action="">
+            
+                <div class="registration">
+                     <div class="donor-form">
+                        <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                      </div>
+                </div>
+
+                
+                        <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                      </div>
+                </div>
+
+                        <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+                      </div>
+                      <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name" aria-label="Last name">
+                      </div>
+                </div>
+
+
+                </div>
+               
+               
+             
+            </div>
+
+        </form>
+        
+    </div>
+
 {% endblock %}
