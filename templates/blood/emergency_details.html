@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+{% comment %} <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emergency Location</title>
@@ -16,6 +16,57 @@
                 position: emergencyLocation,
                 map: map
             });
+        }
+    </script>
+</head>
+<body onload="initMap()">
+    <h1>Emergency Details</h1>
+    <p>Requested by: {{ emergency.user.username }}</p>
+    <p>Blood Type Required: {{ emergency.blood_type }}</p>
+    <p>Location: {{ emergency.location }}</p>
+    <div id="map" style="height: 400px; width: 100%;"></div>
+</body>
+</html> {% endcomment %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Location</title>
+    <!-- Include the HERE Maps JavaScript API -->
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
+
+    <script>
+        function initMap() {
+            var emergencyLocation = {lat: {{ emergency.latitude }}, lng: {{ emergency.longitude }}};
+
+            // Initialize the platform object:
+            var platform = new H.service.Platform({
+                'apikey': 'YOUR_HERE_API_KEY'  // Replace with your HERE API key
+            });
+
+            // Obtain the default map types from the platform object:
+            var defaultLayers = platform.createDefaultLayers();
+
+            // Instantiate (and display) a map object:
+            var map = new H.Map(
+                document.getElementById('map'),
+                defaultLayers.vector.normal.map,
+                {
+                    zoom: 15,
+                    center: emergencyLocation
+                });
+
+            // Add a marker for the emergency location
+            var marker = new H.map.Marker(emergencyLocation);
+            map.addObject(marker);
+
+            // Make the map interactive (pan, zoom, etc.)
+            var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+            // Create the default UI:
+            var ui = H.ui.UI.createDefault(map, defaultLayers);
         }
     </script>
 </head>

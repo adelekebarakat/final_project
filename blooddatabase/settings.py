@@ -131,7 +131,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-GOOGLE_MAPS_API_KEY= config('GOOGLE_MAPS_API_KEY')
+HERE_API_KEY= config('HERE_API_KEY')
 
 TERMII_API_KEY = config('TERMII_API_KEY')
 TERMII_BASE_URL = config('TERMII_BASE_URL')

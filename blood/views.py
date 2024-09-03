@@ -69,7 +69,7 @@ def Create_emergency_request(request):
 
         
             if latitude and longitude:
-                incident_location_name = reverse_geocode(latitude, longitude, settings.GOOGLE_MAPS_API_KEY)
+                incident_location_name = reverse_geocode(latitude, longitude, settings.HERE_API_KEY)
             else:
                 incident_location_name = 'Location not available'
 
