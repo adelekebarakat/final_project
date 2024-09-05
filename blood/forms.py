@@ -53,9 +53,71 @@ def sanitize_phone_number(phone_number, region='NG'):
         return str(e)
 
 class CustomUserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['first_name'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter your first name'
+        })
+
+        self.fields['last_name'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter your last name'
+        })
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter your username'
+        })
+
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter your email-id'
+        })
+
+        self.fields['phone_number'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter your phone number'
+        })
+        self.fields['blood_type'].widget.attrs.update({
+            'class': 'form-control',
+        })
+
+        self.fields['password1'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter your password'
+        })
+        self.fields['password2'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Confirm your password'
+        })
+    
+    first_name = forms.TextInput()
+    last_name = forms.TextInput()
+    username = forms.TextInput()
+    email = forms.EmailField(max_length=150)
+    phone_number = forms.NumberInput()
+    blood_type = forms.Select()
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = User
-        fields = ('username', 'email', 'phone_number', 'blood_type', 'password1', 'password2')
+        
+        # widgets = {
+        #     'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+        #     'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+        #     'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
+        #     'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+        #     'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+        #     'blood_type': forms.Select(attrs={'class': 'form-control'}),
+        #     'password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+        #     'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
+        # }
+
+        fields = ('first_name','last_name','username', 'email', 'phone_number', 'blood_type', 'password1', 'password2')
+
+
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')

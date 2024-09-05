@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import SignInView, SignUpView, Home, Create_emergency_request, emergency_list, emergency_detail
+from .views import SignInView, SignUpView, Home, Create_emergency_request, emergency_list, emergency_detail, SignOutView
 
 urlpatterns = [
     path('register', SignUpView, name='register'),
     path('login', SignInView, name='login'),
+    path('logout/', SignOutView, name="logout"),
     path('home', Home, name='home'),
     path('emergency/create/', Create_emergency_request, name='emergency_request'),
     path('emergencies/', emergency_list, name='emergency_list'),

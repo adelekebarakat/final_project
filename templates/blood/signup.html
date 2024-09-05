@@ -2,12 +2,74 @@
 {% block title%} register {% endblock %}
 
 {% block content%}
-    <h1>Blood Donation</h1>
-    <h2>Register with us</h2>
-
-    <form method="post">
+   
+    {% comment %} <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Sign Up</button>
-    </form>
+    </form> {% endcomment %}
+
+<div class="container reg-section">
+        <h2 class="text-center">Become a Donor today</h2>
+        
+            
+                <div class="registration mx-auto">
+                     <div class="donor-form">
+                        <form action="" method="post"  class="row g-3">
+                           {% csrf_token %}
+                        <div class="col-md-6">
+                            <label for="First name" class="form-label">First Name</label>
+                            {% comment %} <input type="text" class="form-control" id="First name"> {% endcomment %}
+                            {{form.first_name}}
+                          </div>
+                          <div class="col-md-6">
+                            <label for="last name" class="form-label">Last Name</label>
+                            {{form.last_name}}
+                          </div>
+                        <div class="col-md-6">
+                            <label for="username" class="form-label">Username</label>
+                           {{form.username}}
+                          </div>
+                          <div class="col-md-6">
+                            <label for="email" class="form-label">Email Address</label>
+                            {{form.email}}
+                          </div>
+                          {% comment %} <div class="col-12">
+                            <label for="inputAddress" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                          </div> {% endcomment %}
+                          <div class="col-md-6">
+                            <label for="phonenumber" class="form-label">Phone Number</label>
+                            {{form.phone_number}}
+                          </div>
+                          <div class="col-md-6">
+                            <label for="bloodtype" class="form-label">Blood Type</label>
+                            {{form.blood_type}}
+                          </div>
+                         
+                         
+
+                          <div class="col-md-6">
+                            <label for="password" class="form-label">Password</label>
+                            {{form.password1}}
+                          </div>
+                          <div class="col-md-6">
+                            <label for="password2" class="form-label">Confirm Paasword</label>
+                            {{form.password2}}
+                          </div>
+                          <div class="col-12">
+                            <button type="submit" class="btn btn-secondary">Register</button>
+                          </div>
+
+                     </div>
+                
+               
+               
+             
+            </div>
+
+        </form>
+        
+    </div>
+
 {% endblock %}

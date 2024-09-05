@@ -135,3 +135,14 @@ HERE_API_KEY= config('HERE_API_KEY')
 
 TERMII_API_KEY = config('TERMII_API_KEY')
 TERMII_BASE_URL = config('TERMII_BASE_URL')
+
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',
+}

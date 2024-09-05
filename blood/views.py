@@ -2,14 +2,14 @@ from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q
 from .forms import CustomUserCreationForm, EmergencyForm, sanitize_phone_number
 from .models import Emergency, CanDonateTo, CanReceiveFrom, User, BloodType
 from .sms import send_sms
 from .geolocation import get_coordinates
 from .utils import reverse_geocode
-
+from django.contrib import messages
 # Create your views here.
 
 def SignUpView(request):
@@ -17,9 +17,12 @@ def SignUpView(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            messages.success(request, 'Your account has been created successfully!')
             login(request, user)
             print('Successful')
             return redirect('home')
+        else:
+            messages.error(request, 'There was an error creating your account. Please try again.')
     else:
         form = CustomUserCreationForm()
         
@@ -47,8 +50,24 @@ def SignInView(request):
     return render(request, 'blood/signin.html')
 
 
+def SignOutView(request):
+    logout(request)
+    return redirect('login')
+
+
 def Home(request):
-    return render(request, 'blood/home.html')
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            print('Successful')
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+        
+    context = {'form': form}
+    return render(request, 'blood/home.html', context)
 
 @login_required
 def Create_emergency_request(request):
