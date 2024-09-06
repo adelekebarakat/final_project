@@ -108,8 +108,8 @@ def Create_emergency_request(request):
                     f"Case Number: {emergency_request.case_number}\n"
                     f"Emergency blood donation needed. "
                     f"Blood type required: {emergency_request.blood_type}. "
-                    f"Incident location: {incident_location_name}. "
-                    f"Location provided: {filled_location}. "
+                    # f"Incident location: {incident_location_name}. "
+                    f"Location: {filled_location}. "
                     f"Please respond if you can donate."
                 )
                 success, response_message = send_sms(formatted_phone_number, message)
