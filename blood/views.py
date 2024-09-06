@@ -105,7 +105,8 @@ def Create_emergency_request(request):
             for user in compatible_users:
                 formatted_phone_number = sanitize_phone_number(user.phone_number, 'NG')
                 message = (
-                    f"Emergency blood donation needed for {emergency_request.user}. "
+                    f"Case Number: {emergency_request.case_number}\n"
+                    f"Emergency blood donation needed. "
                     f"Blood type required: {emergency_request.blood_type}. "
                     f"Incident location: {incident_location_name}. "
                     f"Location provided: {filled_location}. "

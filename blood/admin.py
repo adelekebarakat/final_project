@@ -15,7 +15,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class EmergencyAdmin(admin.ModelAdmin):
-    list_display = ('get_blood_type', 'reason_for_request', 'location', 'contact_number')
+    list_display = ('get_blood_type', 'reason_for_request', 'location', 'contact_number', 'latitude', 'longitude')
 
 
     def get_blood_type(self, obj):

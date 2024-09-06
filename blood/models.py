@@ -1,4 +1,5 @@
 from django.db import models
+import random
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
@@ -30,11 +31,16 @@ class Emergency(models.Model):
     contact_number = models.CharField(max_length=20)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    case_number = models.CharField(max_length=100, blank=True)
+    
 
+    def save(self, *args, **kwargs):
+        if not self.case_number:
+            random_number = random.randint(1000, 9999)
+            self.case_number = f"CASE-{self.user.id}-{random_number}"
+        super().save(*args, **kwargs)
     def __str__(self):
         return f'Emergency Request by {self.user.username} for {self.blood_type}'
-
-
 
 
 class CanDonateTo(models.Model):
