@@ -1,0 +1,14 @@
+{% extends "./base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Verify Your Phone Number</h2>
+    <p>Please enter the verification code sent to your phone number: {{ user.phone_number }}</p>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Verify</button>
+    </form>
+    <p>If you didn't receive the code, <a href="{% url 'resend_verification_code' %}">click here to resend</a>.</p>
+</div>
+{% endblock %}

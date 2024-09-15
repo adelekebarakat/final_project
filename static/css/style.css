@@ -7,8 +7,11 @@
 
 a {
     text-decoration: none;
-    color: var(--Secondary);
+    /* color: var(--Secondary); */
     
+}
+.btn a {
+    color: var(--Secondary);
 }
 .hero-section {
     padding-bottom: 100px;
@@ -167,7 +170,19 @@ h2{
     align-self: stretch;
     flex-direction: column;
     align-items: start;
-    padding: 22px 42px;
+    padding: 30px 42px;
+}
+.emergency-form {
+    margin-left: 8px;
+    margin-right: 8px;
+    gap: 22px;
+    /* display: flex; */
+    background-color: var(--white_a700);
+    box-shadow: var(--shadow-xs);
+    align-self: stretch;
+    flex-direction: column;
+    align-items: start;
+    padding: 30px 42px;
 }
 .container .registration {
     width: 600px;
@@ -250,5 +265,11 @@ h2{
         line-height: 40px;
     }
     
+    .emergency-form {
+        padding: 30px 20px;
+    }
+    .donor-form {
+        padding: 30px 20px;
+    }
 
 }

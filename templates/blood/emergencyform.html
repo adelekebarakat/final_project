@@ -4,7 +4,11 @@
 {% block title %} emergency {% endblock %}
 
 {% block content %}
-  <h2>Create Emergency Request</h2>
+  <div class="container reg-section">
+  <h2 class="text-center">Create Emergency Request</h2>
+
+    <div class="registration mx-auto">
+        <div class="emergency-form">
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
@@ -12,8 +16,13 @@
     <!-- Hidden fields to store latitude and longitude -->
     <input type="hidden" id="latitude" name="latitude">
     <input type="hidden" id="longitude" name="longitude">
-    <button type="submit">Submit</button>
+    
+    <div class="col-12">
+      <button type="submit" class="btn btn-secondary">Request</button>
+    </div>
   </form>
+</div>
+</div>
   {% if compatible_users %}
     <h3>Compatible Donors:</h3>
     <ul>
@@ -22,6 +31,8 @@
         {% endfor %}
     </ul>
 {% endif %}
+
+</div>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     if (navigator.geolocation) {

@@ -1,0 +1,15 @@
+{% extends "./base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Edit Profile</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+    </form>
+
+    {% if not user.phone_verified and user.phone_number %}
+    <p>Your phone number is not verified. <a href="{% url 'verify_phone' %}">Verify now</a>.</p>
+{% endif %}
+</div>
+{% endblock %}

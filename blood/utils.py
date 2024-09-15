@@ -13,6 +13,7 @@
 #             return results[0]['formatted_address']
     
 #     return None
+import random
 import requests
 
 def reverse_geocode(latitude, longitude, api_key):
@@ -28,3 +29,8 @@ def reverse_geocode(latitude, longitude, api_key):
     
     return 'Location not available'
 
+
+
+def generate_verification_code(length=6):
+    """Generate a random numeric verification code."""
+    return ''.join(random.choices('0123456789', k=length))

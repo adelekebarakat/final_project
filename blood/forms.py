@@ -103,18 +103,6 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        
-        # widgets = {
-        #     'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
-        #     'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
-        #     'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
-        #     'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-        #     'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
-        #     'blood_type': forms.Select(attrs={'class': 'form-control'}),
-        #     'password1': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
-        #     'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
-        # }
-
         fields = ('first_name','last_name','username', 'email', 'phone_number', 'blood_type', 'password1', 'password2')
 
 
@@ -131,9 +119,40 @@ class EmergencyForm(forms.ModelForm):
         model = Emergency
         fields = ['blood_type', 'reason_for_request', 'location', 'contact_number']
 
+        widgets = {
+            'blood_type': forms.Select(attrs={'class': 'form-control'}),
+            'reason_for_request': forms.Select(attrs={'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'provide Additional location'}),
+            'contact_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your phone number'})
+        }
+
     def clean_contact_number(self):
         contact_number = self.cleaned_data.get('contact_number')
         if contact_number:
             sanitized_contact_number = sanitize_phone_number(contact_number)
             return sanitized_contact_number
         return contact_number
+
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'blood_type']
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email
+    
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number:
+            sanitized_phone_number = sanitize_phone_number(phone_number)
+            return sanitized_phone_number
+        return phone_number
+
+
+class VerifyPhoneForm(forms.Form):
+    verification_code = forms.CharField(max_length=6, label="Verification Code", help_text="Enter the 6-digit code sent to your phone.")

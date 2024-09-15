@@ -7,11 +7,16 @@ from .models import User,Emergency, BloodType, CanDonateTo, CanReceiveFrom, Reas
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username','get_blood_type','phone_number', 'email')
-
+    list_filter = ('blood_type__blood_type',)
     def get_blood_type(self, obj):
         return obj.blood_type  # Access blood type through the ForeignKey relationship
 
     get_blood_type.short_description = 'Blood Type'
+
+    # Add ordering by blood_type
+    ordering = ('blood_type__blood_type',)  # Sort by related field's blood_type
+    
+
 
 
 class EmergencyAdmin(admin.ModelAdmin):

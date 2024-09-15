@@ -1,6 +1,8 @@
 import requests
 from django.conf import settings
 import logging
+from django.contrib import messages
+
 
 logger = logging.getLogger(__name__)
 
@@ -41,3 +43,15 @@ def send_sms(formatted_phone_number, message):
         error_msg = f"Exception occurred while sending SMS: {str(e)}"
         logger.exception(error_msg)
         return False, error_msg
+
+
+def send_verification_code(user):
+    if user.phone_number:
+        message = f"Your verification code is {user.verification_code}"
+        success, response_message = send_sms(user.phone_number, message)
+        if success:
+            logger.info(f"Verification code sent to {user.phone_number}")
+        else:
+            logger.error(f"Failed to send verification code to {user.phone_number}: {response_message}")
+    else:
+        messages.error(user, "No phone number provided for verification.")

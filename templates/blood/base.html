@@ -27,20 +27,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">Mission</a>
               </li>
-              <ul class="navbar-nav mb-2 mb-lg-0">
+            </ul>
+              <ul class="navbar-nav  mb-2 mb-lg-0">
                 {% if user.is_authenticated %}
-              <div class="dropdown">
-                <a type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{user.username}}
-                    <i class="fa-solid fa-user"></i> 
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li>
-                            {{user.first_name}} {{user.last_name}} <br> @{{user.username}}
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a></li>
-                  </ul></div>
+             
+                    <li class="nav-link"  ><a class="dropdown-item" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                  
                   {%else%}
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'register'%}">Login/Register</a>
@@ -48,8 +40,9 @@
                   {%endif%}
               </ul>
 
-            </ul>
-            <button class='btn btn-primary'><a href="{% url 'emergency_request' %}">Request</a></button>
+              <button class='btn btn-primary mx-3'><a href="{% url 'emergency_request' %}">Request</a></button>
+              <ul class="navbar-nav mb-2 mb-lg-0">
+           
           
           </div>
         </div>
