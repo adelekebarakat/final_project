@@ -32,6 +32,8 @@
                 {% if user.is_authenticated %}
              
                     <li class="nav-link"  ><a class="dropdown-item" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                    
+                    <li class="nav-link"  ><a class="dropdown-item" href="{% url 'edit_profile' %}"><i class="fa-solid fa-right-from-bracket"></i> profile</a></li>
                   
                   {%else%}
                   <li class="nav-item">

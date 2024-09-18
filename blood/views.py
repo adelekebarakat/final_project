@@ -100,7 +100,7 @@ def Create_emergency_request(request):
 
         
             if latitude and longitude:
-                incident_location_name = reverse_geocode(latitude, longitude, settings.HERE_API_KEY)
+                incident_location_name = reverse_geocode(latitude, longitude, settings.GOOGLE_MAP_API)
             else:
                 incident_location_name = 'Location not available'
 
@@ -120,7 +120,7 @@ def Create_emergency_request(request):
                     f"Case Number: {emergency_request.case_number}\n"
                     f"Emergency blood donation needed. "
                     f"Blood type required: {emergency_request.blood_type}. "
-                    # f"Incident location: {incident_location_name}. "
+                    f"Incident location: {incident_location_name}. "
                     f"Location: {filled_location}. "
                     f"Please respond if you can donate."
                 )
