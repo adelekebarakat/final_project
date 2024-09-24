@@ -1,4 +1,5 @@
 from datetime import timedelta
+import uuid
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -7,26 +8,29 @@ from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q
 from .forms import CustomUserCreationForm, EditProfileForm, EmergencyForm, VerifyPhoneForm, sanitize_phone_number
 from .models import Emergency, CanDonateTo, CanReceiveFrom, User, BloodType
-from .sms import send_sms, send_verification_code
+from .sms import sms
 from .geolocation import get_coordinates
 from .utils import generate_verification_code, reverse_geocode
 from django.contrib import messages
 from django.utils import timezone
+import logging
+
+logger = logging.getLogger(__name__)
 # Create your views here.
 
 def SignUpView(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.phone_verified = False  
-            user.verification_code = generate_verification_code()
-            user.verification_code_created_at = timezone.now()
+            user = form.save()
+            # user.phone_verified = False  
+            # user.verification_code = generate_verification_code()
+            # user.verification_code_created_at = timezone.now()
             user.save()
-            send_verification_code(user)
-            messages.success(request, 'Your account has been created successfully!')
+            # send_verification_code(user)
+            # messages.success(request, 'Your account has been created successfully!')
             login(request, user)
-            return redirect('verify_phone')
+            return redirect('home')
             
             # return redirect('home')
         else:
@@ -81,6 +85,13 @@ def Home(request):
     return render(request, 'blood/home.html', context)
 
 
+from datetime import datetime
+
+def generate_case_number():
+    # Generate a case number with the current date and a short UUID
+    return f"{str(uuid.uuid4()).split('-')[0].upper()}"
+
+
 @login_required(login_url='login')
 def Create_emergency_request(request):
     compatible_users = None
@@ -92,17 +103,20 @@ def Create_emergency_request(request):
             emergency_request.contact_number = sanitize_phone_number(emergency_request.contact_number, 'NG')
 
             # Get coordinates from location using the separated function
-           
             latitude = request.POST.get('latitude')
             longitude = request.POST.get('longitude')
             filled_location = emergency_request.location  # This is the location filled in the form
 
+            # Generate case number
+            if not emergency_request.case_number:
+                emergency_request.case_number = generate_case_number()
 
         
             if latitude and longitude:
                 incident_location_name = reverse_geocode(latitude, longitude, settings.GOOGLE_MAP_API)
             else:
                 incident_location_name = 'Location not available'
+           
 
             emergency_request.save()
 
@@ -113,20 +127,26 @@ def Create_emergency_request(request):
             compatible_users = User.objects.filter(blood_type__in=compatible_blood_types)
             
             # Send SMS to compatible users
-           
+
             for user in compatible_users:
                 formatted_phone_number = sanitize_phone_number(user.phone_number, 'NG')
+                # case_number = emergency_request.case_number or "N/A"
+                location_name = incident_location_name or "Location not available"
                 message = (
-                    f"Case Number: {emergency_request.case_number}\n"
+                    f"Case Number: {emergency_request.case_number}"
                     f"Emergency blood donation needed. "
                     f"Blood type required: {emergency_request.blood_type}. "
                     f"Incident location: {incident_location_name}. "
                     f"Location: {filled_location}. "
                     f"Please respond if you can donate."
                 )
-                success, response_message = send_sms(formatted_phone_number, message)
+                success, response_message = sms(formatted_phone_number, message)
+                print('success')
+    
                 if not success:
-                    print(f"Failed to send SMS to {formatted_phone_number}: {response_message}")
+                    logger.error(f"Failed to send SMS to {formatted_phone_number}: {response_message}")
+
+
 
 
 
@@ -134,7 +154,11 @@ def Create_emergency_request(request):
             
     
     else:
-        form = EmergencyForm()
+        emergency_request = Emergency()
+        emergency_request.case_number = generate_case_number()
+
+        form = EmergencyForm(instance=emergency_request)
+        
     return render(request, 'blood/emergencyform.html', {'form': form})
 
 

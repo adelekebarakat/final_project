@@ -115,9 +115,14 @@ class CustomUserCreationForm(UserCreationForm):
         return phone_number
 
 class EmergencyForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(EmergencyForm, self).__init__(*args, **kwargs)
+        
+        # Make the 'case_number' field readonly
+        self.fields['case_number'].widget.attrs['readonly'] = True
     class Meta:
         model = Emergency
-        fields = ['blood_type', 'reason_for_request', 'location', 'contact_number']
+        fields = ['blood_type', 'reason_for_request', 'location', 'contact_number', 'case_number']
 
         widgets = {
             'blood_type': forms.Select(attrs={'class': 'form-control'}),

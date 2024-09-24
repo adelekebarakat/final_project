@@ -13,9 +13,9 @@ class BloodType(models.Model):
 class User(AbstractUser):
     phone_number = models.CharField(max_length=22, blank=True, null=True)
     blood_type = models.ForeignKey(BloodType, on_delete=models.SET_NULL, blank=True, null=True)
-    phone_verified = models.BooleanField(default=False)
-    verification_code = models.CharField(max_length=6, blank=True, null=True)
-    verification_code_created_at = models.DateTimeField(blank=True, null=True)
+    # phone_verified = models.BooleanField(default=False)
+    # verification_code = models.CharField(max_length=6, blank=True, null=True)
+    # verification_code_created_at = models.DateTimeField(blank=True, null=True)
 
 class ReasonForRequest(models.Model):
     reason = models.CharField(max_length=225, null=True, blank=True)
@@ -36,11 +36,11 @@ class Emergency(models.Model):
     case_number = models.CharField(max_length=100, blank=True)
     
 
-    def save(self, *args, **kwargs):
-        if not self.case_number:
-            random_number = random.randint(1000, 9999)
-            self.case_number = f"CASE-{self.user.id}-{random_number}"
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.case_number:
+    #         random_number = random.randint(1000, 9999)
+    #         self.case_number = f"CASE-{self.user.id}-{random_number}"
+    #     super().save(*args, **kwargs)
     def __str__(self):
         return f'Emergency Request by {self.user.username} for {self.blood_type}'
 
