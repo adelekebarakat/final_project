@@ -133,7 +133,7 @@ def Create_emergency_request(request):
                 # case_number = emergency_request.case_number or "N/A"
                 location_name = incident_location_name or "Location not available"
                 message = (
-                    f"Case Number: {emergency_request.case_number}"
+                    f"Case Number: {emergency_request.case_number}\n"
                     f"Emergency blood donation needed. "
                     f"Blood type required: {emergency_request.blood_type}. "
                     f"Incident location: {incident_location_name}. "
