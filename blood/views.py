@@ -23,16 +23,9 @@ def SignUpView(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # user.phone_verified = False  
-            # user.verification_code = generate_verification_code()
-            # user.verification_code_created_at = timezone.now()
             user.save()
-            # send_verification_code(user)
-            # messages.success(request, 'Your account has been created successfully!')
             login(request, user)
             return redirect('home')
-            
-            # return redirect('home')
         else:
             messages.error(request, 'There was an error creating your account. Please try again.')
     else:

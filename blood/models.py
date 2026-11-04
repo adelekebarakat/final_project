@@ -13,9 +13,7 @@ class BloodType(models.Model):
 class User(AbstractUser):
     phone_number = models.CharField(max_length=22, blank=True, null=True)
     blood_type = models.ForeignKey(BloodType, on_delete=models.SET_NULL, blank=True, null=True)
-    # phone_verified = models.BooleanField(default=False)
-    # verification_code = models.CharField(max_length=6, blank=True, null=True)
-    # verification_code_created_at = models.DateTimeField(blank=True, null=True)
+   
 
 class ReasonForRequest(models.Model):
     reason = models.CharField(max_length=225, null=True, blank=True)
