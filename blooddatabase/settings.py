@@ -163,10 +163,9 @@ STORAGES = {
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-GOOGLE_MAP_API= config('GOOGLE_MAP_API')
-
-TERMII_API_KEY = config('TERMII_API_KEY')
-TERMII_BASE_URL = config('TERMII_BASE_URL')
+GOOGLE_MAP_API = config('GOOGLE_MAP_API', default='')
+TERMII_API_KEY = config('TERMII_API_KEY', default='')
+TERMII_BASE_URL = config('TERMII_BASE_URL', default='')
 
 
 from django.contrib.messages import constants as messages
