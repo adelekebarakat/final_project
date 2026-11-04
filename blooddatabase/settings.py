@@ -41,7 +41,21 @@ RENDER_EXTERNAL_HOSTNAME = config(
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default=''
+).split(',')
 
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in CSRF_TRUSTED_ORIGINS
+    if origin.strip()
+]
+
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(
+        f'https://{RENDER_EXTERNAL_HOSTNAME}'
+    )
 # Application definition
 
 INSTALLED_APPS = [
