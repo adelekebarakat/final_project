@@ -33,6 +33,15 @@ ALLOWED_HOSTS = config(
 ).split(',')
 
 
+RENDER_EXTERNAL_HOSTNAME = config(
+    'RENDER_EXTERNAL_HOSTNAME',
+    default=''
+)
+
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+
 # Application definition
 
 INSTALLED_APPS = [
