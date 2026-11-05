@@ -17,8 +17,6 @@ class User(AbstractUser):
 
 class ReasonForRequest(models.Model):
     reason = models.CharField(max_length=225, null=True, blank=True)
-
-
     def __str__(self):
         return self.reason
 
@@ -34,11 +32,6 @@ class Emergency(models.Model):
     case_number = models.CharField(max_length=100, blank=True)
     
 
-    # def save(self, *args, **kwargs):
-    #     if not self.case_number:
-    #         random_number = random.randint(1000, 9999)
-    #         self.case_number = f"CASE-{self.user.id}-{random_number}"
-    #     super().save(*args, **kwargs)
     def __str__(self):
         return f'Emergency Request by {self.user.username} for {self.blood_type}'
 
