@@ -9,7 +9,7 @@
 
     <div class="registration mx-auto">
         <div class="emergency-form">
-  <form method="post">
+  <form method="post" onsubmit="return confirmEmergencyRequest()">
     {% csrf_token %}
     {{ form.as_p }}
 
@@ -34,6 +34,11 @@
 
 </div>
 <script>
+   function confirmEmergencyRequest() {
+    return confirm(
+      "Are you sure you want to submit this emergency blood request? Please confirm that all your details are correct."
+    );
+  }
   document.addEventListener("DOMContentLoaded", function() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {

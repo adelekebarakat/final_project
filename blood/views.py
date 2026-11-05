@@ -139,12 +139,11 @@ def Create_emergency_request(request):
                 if not success:
                     logger.error(f"Failed to send SMS to {formatted_phone_number}: {response_message}")
 
-
-
-
-
-            return render(request, 'blood/compatible_users.html', {'compatible_users': compatible_users})
-            
+            return render(request, 'blood/compatible_users.html', {
+    'compatible_users': compatible_users,
+    'required_blood_type': emergency_request.blood_type,
+})
+            # return render(request, 'blood/compatible_users.html', {'compatible_users': compatible_users})
     
     else:
         emergency_request = Emergency()
