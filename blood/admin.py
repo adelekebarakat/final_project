@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User,Emergency, BloodType, CanDonateTo, CanReceiveFrom, ReasonForRequest
+from .models import User,Emergency, BloodType, CanDonateTo, CanReceiveFrom, ReasonForRequest, EmergencyResponse
 
 # Register your models here.
 
@@ -33,3 +33,4 @@ admin.site.register(CanDonateTo)
 admin.site.register(CanReceiveFrom)
 admin.site.register(Emergency, EmergencyAdmin)
 admin.site.register(ReasonForRequest)
+admin.site.register(EmergencyResponse)

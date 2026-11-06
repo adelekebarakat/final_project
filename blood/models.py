@@ -57,4 +57,29 @@ class CanReceiveFrom(models.Model):
         return f'{self.blood_type} can receive from{self.can_receive_from}'
 
 
-    
+class EmergencyResponse(models.Model):
+    RESPONSE_CHOICES = [
+        ('WILLING', 'I can donate'),
+        ('UNABLE', 'I cannot donate')
+    ]
+    emergency = models.ForeignKey(
+        Emergency,
+        on_delete=models.CASCADE,
+        related_name= 'responses'
+    )
+    donor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='emergency_responses'
+    )
+    response = models.CharField(
+        max_length=10, choices=RESPONSE_CHOICES
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta: 
+        unique_together = ('emergency', 'donor')
+
+    def __str__(self):
+        return f'{self.donor.username} - {self.emergency.case_number} - {self.response}'

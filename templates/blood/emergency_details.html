@@ -1,80 +1,333 @@
-<!DOCTYPE html>
-<html lang="en">
-{% comment %} <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emergency Location</title>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsD8JlHo5ohM5J9ARhoQEMCseXG4UYySw&callback=initMap"></script>
-    <script>
-        function initMap() {
-            var emergencyLocation = {lat: {{ emergency.latitude }}, lng: {{ emergency.longitude }}};
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 15,
-                center: emergencyLocation
-            });
-            var marker = new google.maps.Marker({
-                position: emergencyLocation,
-                map: map
-            });
+
+{% extends './base.html' %}
+
+{% block title %}Emergency Details | Blood Donation{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Emergency Details</h2>
+            <p class="text-muted mb-0">
+                Emergency blood donation request information
+            </p>
+        </div>
+
+        <span class="badge bg-danger fs-6 px-3 py-2">
+            Urgent Blood Request
+        </span>
+    </div>
+
+    <!-- Emergency Information -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">Request Information</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <small class="text-muted">Case Number</small>
+                    <h6 class="fw-bold">{{ emergency.case_number }}</h6>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Requested By</small>
+                    <h6 class="fw-bold">{{ emergency.user.username }}</h6>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Blood Type Required</small>
+                    <h4 class="fw-bold text-danger">
+                        {{ emergency.blood_type }}
+                    </h4>
+                </div>
+
+                <div class="col-md-6">
+                    <small class="text-muted">Contact Number</small>
+                    <h6 class="fw-bold">{{ emergency.contact_number }}</h6>
+                </div>
+
+                <div class="col-12">
+                    <small class="text-muted">Incident Location</small>
+                    <h6 class="fw-bold">{{ emergency.location }}</h6>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">Emergency Location</h5>
+        </div>
+
+        <div class="card-body">
+            {% if emergency.latitude and emergency.longitude %}
+                <div id="map" style="height: 350px; width: 100%;"></div>
+            {% else %}
+                <div class="text-center py-4 bg-light rounded">
+                    <p class="text-muted mb-0">
+                        Map location is currently unavailable.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Requester Dashboard -->
+    {% if is_requester %}
+
+        <div class="mb-4">
+            <h4 class="fw-bold mb-1">Donor Response Dashboard</h4>
+            <p class="text-muted">
+                Monitor how donors are responding to your request.
+            </p>
+        </div>
+
+        <div class="row g-3 mb-4">
+
+            <!-- Willing Donors -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-2">
+                                    Willing Donors
+                                </p>
+                                <h2 class="fw-bold text-success mb-0">
+                                    {{ willing_count }}
+                                </h2>
+                            </div>
+
+                            <div class="bg-success bg-opacity-10 rounded-circle p-3">
+                                <span class="text-success fw-bold fs-4">✓</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unable Donors -->
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-2">
+                                    Unable to Donate
+                                </p>
+                                <h2 class="fw-bold text-danger mb-0">
+                                    {{ unable_count }}
+                                </h2>
+                            </div>
+
+                            <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+                                <span class="text-danger fw-bold fs-4">×</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Donor Response Table -->
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0">Donor Responses</h5>
+            </div>
+
+            <div class="card-body">
+
+                {% if donor_responses %}
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Donor</th>
+                                    <th>Blood Type</th>
+                                    <th>Phone Number</th>
+                                    <th>Response</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for response in donor_responses %}
+                                    <tr>
+                                        <td class="fw-semibold">
+                                            {{ response.donor.username }}
+                                        </td>
+
+                                        <td>
+                                            {{ response.donor.blood_type }}
+                                        </td>
+
+                                        <td>
+                                            {{ response.donor.phone_number|default:"Not provided" }}
+                                        </td>
+
+                                        <td>
+                                            {% if response.response == 'WILLING' %}
+                                                <span class="badge bg-success">
+                                                    Willing to Donate
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-danger">
+                                                    Unable to Donate
+                                                </span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-muted small">
+                                            {{ response.created_at|date:"d M Y, h:i A" }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                {% else %}
+
+                    <div class="text-center py-4">
+                        <h6 class="text-muted">
+                            No donor responses yet.
+                        </h6>
+                        <p class="small text-muted mb-0">
+                            Donor responses will appear here when submitted.
+                        </p>
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% endif %}
+
+    <!-- Donor Response Section -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+            <h4 class="fw-bold mb-3">Respond to this Emergency</h4>
+
+            {% if emergency.user == request.user %}
+
+                <div class="alert alert-info mb-0">
+                    You created this emergency request. You cannot respond to it.
+                </div>
+
+            {% elif donor_response %}
+
+                <div class="alert alert-info mb-0">
+                    <h6 class="fw-bold">Response Already Submitted</h6>
+                    Your response:
+                    <strong>{{ donor_response.get_response_display }}</strong>
+                    <p class="mb-0 mt-2">
+                        You have already responded to this emergency request.
+                    </p>
+                </div>
+
+            {% elif not request.user.blood_type %}
+
+                <div class="alert alert-warning mb-0">
+                    Please update your profile with your blood type before responding.
+                </div>
+
+            {% elif is_compatible %}
+
+                <p class="text-muted">
+                    Your blood type is compatible with this request.
+                    Can you help?
+                </p>
+
+                <form method="POST"
+                      action="{% url 'respond_to_emergency' emergency.id %}">
+
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            name="response"
+                            value="WILLING"
+                            class="btn btn-success me-2 mb-2">
+                        ✓ I Can Donate
+                    </button>
+
+                    <button type="submit"
+                            name="response"
+                            value="UNABLE"
+                            class="btn btn-outline-danger mb-2">
+                        ✕ I Cannot Donate
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <div class="alert alert-warning mb-0">
+                    Your blood type is not compatible with this emergency request.
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <a href="{% url 'emergency_list' %}" class="btn btn-outline-secondary">
+        ← Back to Emergency Requests
+    </a>
+
+</div>
+
+{% if emergency.latitude and emergency.longitude %}
+<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+
+<link rel="stylesheet"
+      href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
+
+<script>
+    const emergencyLocation = {
+        lat: {{ emergency.latitude }},
+        lng: {{ emergency.longitude }}
+    };
+
+    const platform = new H.service.Platform({
+        'apikey': 'YOUR_HERE_API_KEY'
+    });
+
+    const defaultLayers = platform.createDefaultLayers();
+
+    const map = new H.Map(
+        document.getElementById('map'),
+        defaultLayers.vector.normal.map,
+        {
+            zoom: 15,
+            center: emergencyLocation
         }
-    </script>
-</head>
-<body onload="initMap()">
-    <h1>Emergency Details</h1>
-    <p>Requested by: {{ emergency.user.username }}</p>
-    <p>Blood Type Required: {{ emergency.blood_type }}</p>
-    <p>Location: {{ emergency.location }}</p>
-    <div id="map" style="height: 400px; width: 100%;"></div>
-</body>
-</html> {% endcomment %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emergency Location</title>
-    <!-- Include the HERE Maps JavaScript API -->
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
-    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
-    <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css">
+    );
 
-    <script>
-        function initMap() {
-            var emergencyLocation = {lat: {{ emergency.latitude }}, lng: {{ emergency.longitude }}};
+    new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-            // Initialize the platform object:
-            var platform = new H.service.Platform({
-                'apikey': 'YOUR_HERE_API_KEY'  // Replace with your HERE API key
-            });
+    H.ui.UI.createDefault(map, defaultLayers);
 
-            // Obtain the default map types from the platform object:
-            var defaultLayers = platform.createDefaultLayers();
+    map.addObject(new H.map.Marker(emergencyLocation));
+</script>
+{% endif %}
 
-            // Instantiate (and display) a map object:
-            var map = new H.Map(
-                document.getElementById('map'),
-                defaultLayers.vector.normal.map,
-                {
-                    zoom: 15,
-                    center: emergencyLocation
-                });
-
-            // Add a marker for the emergency location
-            var marker = new H.map.Marker(emergencyLocation);
-            map.addObject(marker);
-
-            // Make the map interactive (pan, zoom, etc.)
-            var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-
-            // Create the default UI:
-            var ui = H.ui.UI.createDefault(map, defaultLayers);
-        }
-    </script>
-</head>
-<body onload="initMap()">
-    <h1>Emergency Details</h1>
-    <p>Requested by: {{ emergency.user.username }}</p>
-    <p>Blood Type Required: {{ emergency.blood_type }}</p>
-    <p>Location: {{ emergency.location }}</p>
-    <div id="map" style="height: 400px; width: 100%;"></div>
-</body>
-</html>
+{% endblock %}

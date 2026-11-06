@@ -7,12 +7,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q
 from .forms import CustomUserCreationForm, EditProfileForm, EmergencyForm, VerifyPhoneForm, sanitize_phone_number
-from .models import Emergency, CanDonateTo, CanReceiveFrom, User, BloodType
+from .models import Emergency, EmergencyResponse, CanDonateTo, CanReceiveFrom, User, BloodType
 from .sms import sms
 from .geolocation import get_coordinates
 from .utils import generate_verification_code, reverse_geocode
 from django.contrib import messages
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 import logging
 
 logger = logging.getLogger(__name__)
@@ -33,10 +34,6 @@ def SignUpView(request):
         
     context = {'form': form}
     return render(request, 'blood/signup.html', context)
-    
-
-
-
 
 def SignInView(request):
     if request.method == 'POST':
@@ -160,10 +157,154 @@ def emergency_list(request):
     return render(request, 'blood/emergency_list.html', {'emergencies': emergencies})
 
 
+# @login_required(login_url='login')
+# def emergency_detail(request, emergency_id):
+#     emergency = get_object_or_404(Emergency, id=emergency_id)
+#     return render(request, 'blood/emergency_details.html', {'emergency': emergency})
+
+
+
+# Emergency Detail
+# @login_required(login_url='login')
+# def emergency_detail(request, emergency_id):
+#     emergency = get_object_or_404(Emergency, id=emergency_id)
+
+#     is_compatible = False
+#     donor_response = None
+
+#     if request.user.is_authenticated and request.user.blood_type:
+#         is_compatible = CanReceiveFrom.objects.filter(
+#             blood_type=emergency.blood_type,
+#             can_receive_from=request.user.blood_type
+#         ).exists()
+
+#     if request.user.is_authenticated:
+#         donor_response = EmergencyResponse.objects.filter(
+#             emergency=emergency,
+#             donor=request.user
+#         ).first()
+
+#     context = {
+#         'emergency': emergency,
+#         'is_compatible': is_compatible,
+#         'donor_response': donor_response,
+#     }
+
+#     return render(request, 'blood/emergency_details.html', context)
+
+
 @login_required(login_url='login')
 def emergency_detail(request, emergency_id):
     emergency = get_object_or_404(Emergency, id=emergency_id)
-    return render(request, 'blood/emergency_details.html', {'emergency': emergency})
+
+    is_compatible = False
+    donor_response = None
+
+    # Check blood compatibility
+    if request.user.blood_type and emergency.blood_type:
+        is_compatible = CanReceiveFrom.objects.filter(
+            blood_type=emergency.blood_type,
+            can_receive_from=request.user.blood_type
+        ).exists()
+
+    # Get the logged-in donor's response
+    donor_response = EmergencyResponse.objects.filter(
+        emergency=emergency,
+        donor=request.user
+    ).first()
+
+    # Only the emergency requester can see all donor responses
+    is_requester = emergency.user == request.user
+
+    donor_responses = None
+    willing_count = 0
+    unable_count = 0
+
+    if is_requester:
+        donor_responses = EmergencyResponse.objects.filter(
+            emergency=emergency
+        ).select_related('donor', 'donor__blood_type')
+
+        willing_count = donor_responses.filter(
+            response='WILLING'
+        ).count()
+
+        unable_count = donor_responses.filter(
+            response='UNABLE'
+        ).count()
+
+    context = {
+        'emergency': emergency,
+        'is_compatible': is_compatible,
+        'donor_response': donor_response,
+        'is_requester': is_requester,
+        'donor_responses': donor_responses,
+        'willing_count': willing_count,
+        'unable_count': unable_count,
+    }
+
+    return render(request, 'blood/emergency_details.html', context)
+
+# Response to emergency request
+@login_required(login_url='login')
+@require_POST
+def respond_to_emergency(request, emergency_id):
+
+    emergency = get_object_or_404(Emergency, id=emergency_id)
+
+    # Prevent the person requesting blood from responding
+    if emergency.user == request.user:
+        messages.error(request, "You cannot respond to your own emergency request.")
+        return redirect('emergency_detail', emergency_id=emergency.id)
+
+    # Check whether the logged-in donor has a blood type
+    if not request.user.blood_type:
+        messages.error(request, "Please update your profile with your blood type.")
+        return redirect('emergency_detail', emergency_id=emergency.id)
+
+    # Check blood compatibility
+    is_compatible = CanReceiveFrom.objects.filter(
+        blood_type=emergency.blood_type,
+        can_receive_from=request.user.blood_type
+    ).exists()
+
+    if not is_compatible:
+        messages.error(request, "Your blood type is not compatible with this request.")
+        return redirect('emergency_detail', emergency_id=emergency.id)
+
+    # Get the donor's response
+    donor_response = request.POST.get('response')
+
+    valid_responses = dict(EmergencyResponse.RESPONSE_CHOICES)
+
+    if donor_response not in valid_responses:
+        messages.error(request, "Invalid response. Please try again.")
+        return redirect('emergency_detail', emergency_id=emergency.id)
+
+    # Save or update the donor's response
+    # Prevent multiple responses to the same emergency
+    existing_response = EmergencyResponse.objects.filter(
+        emergency=emergency,
+        donor=request.user
+    ).exists()
+
+    if existing_response:
+        messages.warning(
+            request,
+            "You have already responded to this emergency request."
+        )
+        return redirect('emergency_list')
+
+    # Save the donor's response
+    EmergencyResponse.objects.create(
+        emergency=emergency,
+        donor=request.user,
+        response=donor_response
+    )
+
+    messages.success(request, "Your response has been submitted successfully.")
+    return redirect('emergency_list')
+
 
 
 @login_required(login_url='login')

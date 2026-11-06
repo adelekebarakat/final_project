@@ -1,18 +1,146 @@
+
 {% extends './base.html' %}
 
+{% block title %}Emergency Requests | Blood Donation{% endblock %}
+
 {% block content %}
-  <h2>Emergency Requests</h2>
-  <ul>
-    {% for emergency in emergencies %}
-      <li>
-        <a href="{% url 'emergency_detail' emergency.id %}">
-          <strong>{{ emergency.user.username }}</strong> requires 
-          <strong>{{ emergency.blood_type }}</strong> blood 
-          (Urgency: {{ emergency.urgency_level }}) at 
-          {{ emergency.location }}.
+
+<div class="container py-5">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-2">Emergency Blood Requests</h2>
+            <p class="text-muted mb-0">
+                Find emergency blood donation requests and help save lives.
+            </p>
+        </div>
+
+        <a href="{% url 'emergency_request' %}"
+           class="btn btn-danger mt-3 mt-md-0">
+            + Create Emergency Request
         </a>
-        Contact: {{ emergency.contact_number }}
-      </li>
-    {% endfor %}
-  </ul>
+
+    </div>
+
+    <!-- Request Count -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body d-flex align-items-center justify-content-between">
+            <div>
+                <p class="text-muted mb-1">Total Emergency Requests</p>
+                <h3 class="fw-bold mb-0">{{ emergencies|length }}</h3>
+            </div>
+
+            <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+                <span class="text-danger fw-bold fs-3">!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Request Cards -->
+    <div class="row g-4">
+
+        {% for emergency in emergencies %}
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="card border-0 shadow-sm h-100">
+
+                    <div class="card-body p-4">
+
+                        <!-- Case Number and Status -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+
+                            <small class="text-muted">
+                                Case #{{ emergency.case_number }}
+                            </small>
+
+                            <span class="badge bg-danger">
+                                Blood Needed
+                            </span>
+
+                        </div>
+
+                        <!-- Blood Group -->
+                        <div class="mb-3">
+                            <small class="text-muted">Required Blood Type</small>
+
+                            <h1 class="fw-bold text-danger mb-0">
+                                {{ emergency.blood_type }}
+                            </h1>
+                        </div>
+
+                        <hr>
+
+                        <!-- Request Details -->
+                        <div class="mb-3">
+
+                            <p class="mb-2">
+                                <strong>Requester:</strong>
+                                {{ emergency.user.username|default:"Unknown" }}
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Reason:</strong>
+                                {{ emergency.reason_for_request|default:"Not specified" }}
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Location:</strong>
+                                {{ emergency.location }}
+                            </p>
+
+                        </div>
+
+                        <!-- Contact -->
+                        <div class="bg-light rounded p-3 mb-3">
+                            <small class="text-muted d-block mb-1">
+                                Contact Number
+                            </small>
+
+                            <strong>{{ emergency.contact_number }}</strong>
+                        </div>
+
+                        <!-- View Details -->
+                        <a href="{% url 'emergency_detail' emergency.id %}"
+                           class="btn btn-outline-danger w-100">
+                            View Emergency Details →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <div class="col-12">
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+
+                        <h4 class="fw-bold">No Emergency Requests</h4>
+
+                        <p class="text-muted">
+                            There are currently no emergency blood requests.
+                        </p>
+
+                        <a href="{% url 'emergency_request' %}"
+                           class="btn btn-danger">
+                            Create Emergency Request
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
 {% endblock %}
